@@ -2,7 +2,8 @@ import { model, Schema, Types } from 'mongoose';
 
 const { ObjectId } = Types;
 
-interface IPost {
+export interface IPost {
+  _id?: string;
 	title: string;
 	text: string;
 	author: {
