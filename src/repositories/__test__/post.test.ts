@@ -1,7 +1,7 @@
 // @ts-expect-error TS7016
 import * as mockingoose from 'mockingoose';
 import { IPost, Post } from '../../models/Post';
-import { createPost } from '../post';
+import { createPost, findPosts } from '../post';
 
 describe('Posts repository', () => {
 	describe('createPost', () => {
@@ -14,6 +14,8 @@ describe('Posts repository', () => {
 					id: '625312a23f45ce2c790a59ad',
 					name: 'Lameck Sandro',
 				},
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
 			};
 
 			mockingoose(Post).toReturn(
@@ -31,7 +33,40 @@ describe('Posts repository', () => {
 		});
 	});
 
-	// describe('findPosts', () => {
-	// 	it('should return a list of posts', async () => {});
-	// });
+	describe('findPosts', () => {
+		it('should return a list of posts', async () => {
+			const _posts: IPost[] = [
+				{
+					_id: '62562da9f2d61f39de52632d',
+					title: 'My Workout Routine',
+					text: 'My trainer send me a workout ABC-ABC and works very well!',
+					likes: [],
+					author: {
+						id: '625312a23f45ce2c790a59ad',
+						name: 'Lameck Sandro',
+					},
+					createdAt: new Date().toISOString(),
+					updatedAt: new Date().toISOString(),
+				},
+				{
+					_id: '6256300f1a2e6a12b360daa8',
+					title: 'My Workout Routine 2',
+					text: 'My trainer send me a workout ABCDE and works very well!',
+					likes: [],
+					author: {
+						id: '625312a23f45ce2c790a59ad',
+						name: 'Lameck Sandro',
+					},
+					createdAt: new Date().toISOString(),
+					updatedAt: new Date().toISOString(),
+				},
+			];
+
+			mockingoose(Post).toReturn(_posts, 'find');
+
+			const result = await findPosts({});
+
+			expect(JSON.parse(JSON.stringify(result))).toHaveLength(2);
+		});
+	});
 });

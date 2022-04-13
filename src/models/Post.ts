@@ -24,30 +24,37 @@ export interface IPost {
 		};
 		type: 'like' | 'dislike' | 'clap' | 'love';
 	}[];
+	createdAt: Date | string;
+	updatedAt: Date | string;
 }
 
-const postSchema = new Schema<IPost>({
-	title: { type: String, required: true },
-	text: { type: String, required: true },
-	author: {
-		id: { type: ObjectId, required: true },
-		name: { type: String, required: true },
-	},
-	likes: [
-		{
-			user: {
-				id: { type: ObjectId, required: true },
-				name: { type: String, required: true },
-				avatar: { type: String, required: false },
-			},
-			type: {
-				type: String,
-				required: true,
-				enum: ['like', 'dislike', 'clap', 'love'],
-				default: 'like',
-			},
+const postSchema = new Schema<IPost>(
+	{
+		title: { type: String, required: true },
+		text: { type: String, required: true },
+		author: {
+			id: { type: ObjectId, required: true },
+			name: { type: String, required: true },
 		},
-	],
-});
+		likes: [
+			{
+				user: {
+					id: { type: ObjectId, required: true },
+					name: { type: String, required: true },
+					avatar: { type: String, required: false },
+				},
+				type: {
+					type: String,
+					required: true,
+					enum: ['like', 'dislike', 'clap', 'love'],
+					default: 'like',
+				},
+			},
+		],
+	},
+	{
+		timestamps: true,
+	}
+);
 
 export const Post = model<IPost>('Post', postSchema);
