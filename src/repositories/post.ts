@@ -1,3 +1,4 @@
+import { FilterQuery, QueryOptions } from 'mongoose';
 import { IPost, Post } from '../models/Post';
 
 // The return type is
@@ -11,8 +12,16 @@ export async function createPost(data: Partial<IPost>) {
 	return post.toObject();
 }
 
-export async function findPosts() {
-	const posts = await Post.find();
+export async function findPosts({
+	options,
+	projection,
+	query,
+}: {
+	query?: FilterQuery<IPost>;
+	projection?: any;
+	options?: QueryOptions;
+}) {
+	const posts = await Post.find(query || {}, projection || null, options || {});
 
 	return posts;
 }
