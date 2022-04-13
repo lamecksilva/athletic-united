@@ -2,8 +2,14 @@ import { model, Schema, Types } from 'mongoose';
 
 const { ObjectId } = Types;
 
+export enum PostLikesTypes {
+	'LIKE' = 'like',
+	'LOVE' = 'love',
+	'DISLIKE' = 'dislike',
+	'CLAP' = 'clap',
+}
 export interface IPost {
-  _id?: string;
+	_id?: string;
 	title: string;
 	text: string;
 	author: {
@@ -11,9 +17,13 @@ export interface IPost {
 		name: string;
 	};
 	likes: {
-		total: number;
-		reactions: { type: string; total: number }[];
-	};
+		user: {
+			id: string;
+			name: string;
+			avatar: string;
+		};
+		type: 'like' | 'dislike' | 'clap' | 'love';
+	}[];
 }
 
 const postSchema = new Schema<IPost>({
@@ -23,15 +33,21 @@ const postSchema = new Schema<IPost>({
 		id: { type: ObjectId, required: true },
 		name: { type: String, required: true },
 	},
-	likes: {
-		total: { type: Number, required: true, default: 0 },
-		reactions: [
-			{
-				type: { type: String, required: true },
-				total: { type: Number, required: true, default: 0 },
+	likes: [
+		{
+			user: {
+				id: { type: ObjectId, required: true },
+				name: { type: String, required: true },
+				avatar: { type: String, required: false },
 			},
-		],
-	},
+			type: {
+				type: String,
+				required: true,
+				enum: ['like', 'dislike', 'clap', 'love'],
+				default: 'like',
+			},
+		},
+	],
 });
 
 export const Post = model<IPost>('Post', postSchema);

@@ -9,10 +9,7 @@ describe('Posts repository', () => {
 			const _post: IPost = {
 				title: 'My Workout Routine',
 				text: 'My trainer send me a workout ABC-ABC and works very well!',
-				likes: {
-					total: 0,
-					reactions: [],
-				},
+				likes: [],
 				author: {
 					id: '625312a23f45ce2c790a59ad',
 					name: 'Lameck Sandro',
